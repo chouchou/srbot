@@ -1,4 +1,4 @@
-Projektstruktur:
+Mapp- och filstruktur:
 
 #main(repo)
 	- sr-bot.ino
