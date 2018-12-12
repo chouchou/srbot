@@ -14,7 +14,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define BSL_MAX  460 // 
 #define BSL_CH 4
 
-#define BSR_MIN  120 // BS1 = Big servo (luxorparts)
+#define BSR_MIN  100 // BS1 = Big servo (luxorparts)
 #define BSR_MAX  460 // 
 #define BSR_CH 5
 
@@ -44,22 +44,40 @@ void setup() {
   pwm.begin();
   pwm.setPWMFreq(50);  // Analog servos run at ~60 Hz updates
   delay(10);
+      lowerRight();
+    lowerLeft();
 }
 
 
 void loop() {
+  // Kolla om någon microswitch är sluten
   if (digitalRead(2) == LOW) {
+
+    
 
     digitalWrite(13, HIGH);
     if (!found) {
       closeArms();
       found = true;
+      delay(50);
+      closeRightArm();
+      delay(500);
+      openRightArm();
+      delay(500);
+      closeLeftArm();
+      delay(500);
+      openLeftArm();
+      delay(200);
+      liftRight();
+      delay(1000);
+      lowerRight();
+      
     } else if (found) {
       openArms();
       found = false;
     }
     digitalWrite(13, LOW);
-    delay(50);
+
   }
 }
 
@@ -101,6 +119,29 @@ void lowerRight() {
   pwm.setPWM(BSR_CH, 0, pulselength);
   Serial.println(pulselength);
 }
+void closeLeftArm(){
+  uint32_t pulselength1 = map(120, 0, 180, SSLD_MIN, SSLD_MAX);
+  pwm.setPWM(SSLD_CH, 0, pulselength1);
+}
+  
+void openLeftArm(){
+  uint32_t pulselength1 = map(0, 0, 180, SSLD_MIN, SSLD_MAX);
+  pwm.setPWM(SSLD_CH, 0, pulselength1);
+}
+  
+  
+void closeRightArm(){
+  uint32_t pulselength1 = map(180, 0, 180, SSRU_MIN, SSRU_MAX);
+  pwm.setPWM(SSRU_CH, 0, pulselength1);
+}
+
+void openRightArm(){
+  uint32_t pulselength1 = map(0, 0, 180, SSRU_MIN, SSRU_MAX);
+  pwm.setPWM(SSRU_CH, 0, pulselength1);
+}
+  
+
+
 
 
 
