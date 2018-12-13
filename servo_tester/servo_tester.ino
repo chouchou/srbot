@@ -119,6 +119,29 @@ void lowerRight() {
   pwm.setPWM(BSR_CH, 0, pulselength);
   Serial.println(pulselength);
 }
+void closeLeftArm(){
+  uint32_t pulselength1 = map(120, 0, 180, SSLD_MIN, SSLD_MAX);
+  pwm.setPWM(SSLD_CH, 0, pulselength1);
+}
+  
+void openLeftArm(){
+  uint32_t pulselength1 = map(0, 0, 180, SSLD_MIN, SSLD_MAX);
+  pwm.setPWM(SSLD_CH, 0, pulselength1);
+}
+  
+  
+void closeRightArm(){
+  uint32_t pulselength1 = map(180, 0, 180, SSRU_MIN, SSRU_MAX);
+  pwm.setPWM(SSRU_CH, 0, pulselength1);
+}
+
+void openRightArm(){
+  uint32_t pulselength1 = map(0, 0, 180, SSRU_MIN, SSRU_MAX);
+  pwm.setPWM(SSRU_CH, 0, pulselength1);
+}
+  
+
+
 
 
 
