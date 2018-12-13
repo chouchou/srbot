@@ -12,11 +12,11 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 #define BSL_MIN  120 // BS1 = Big servo (luxorparts)
 #define BSL_MAX  460 // 
-#define BSL_CH 4
+#define BSL_CH 0
 
 #define BSR_MIN  120 // BS1 = Big servo (luxorparts)
 #define BSR_MAX  460 // 
-#define BSR_CH 5
+#define BSR_CH 1
 
 #define SSRU_MIN  100 // SS1 = Small servo - check tape
 #define SSRU_MAX  440 //
@@ -35,6 +35,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define SS4_CH 3
 
 boolean found = false;
+byte byteRead;
 
 void setup() {
   Serial.begin(9600);
@@ -48,19 +49,36 @@ void setup() {
 
 
 void loop() {
-  if (digitalRead(2) == LOW) {
-
-    digitalWrite(13, HIGH);
-    if (!found) {
-      closeArms();
-      found = true;
-    } else if (found) {
-      openArms();
-      found = false;
+  if (Serial.available()) {
+    /* read the most recent byte */
+    byteRead = Serial.read();
+    /*ECHO the value that was read, back to the serial port. */
+    if(byteRead=='q'){
+      liftLeft();
+      Serial.println(byteRead);
+    }else if(byteRead=='w'){
+      liftRight();
+    }else if(byteRead=='e'){
+      lowerLeft();
+    }else if(byteRead=='r'){
+      lowerRight();
     }
-    digitalWrite(13, LOW);
-    delay(50);
   }
+  //lowerLeft();
+  //lowerRight();
+//  if (digitalRead(2) == LOW) {
+//
+//    digitalWrite(13, HIGH);
+//    if (!found) {
+//      closeArms();
+//      found = true;
+//    } else if (found) {
+//      openArms();
+//      found = false;
+//    }
+//    digitalWrite(13, LOW);
+//    delay(50);
+//  }
 }
 
 void closeArms() {
@@ -92,7 +110,7 @@ void lowerLeft() {
 }
 
 void liftRight() {
-  uint32_t pulselength = map(140, 0, 180, BSR_MIN, BSR_MAX);
+  uint32_t pulselength = map(135, 0, 180, BSR_MIN, BSR_MAX);
   pwm.setPWM(BSR_CH, 0, pulselength);
   Serial.println(pulselength);
 }
